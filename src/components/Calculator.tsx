@@ -13,33 +13,29 @@ const btnValues = [
   ];
 
 
-
-
 const calcInitial={
     expression: "",
     res: ""
 }
 
-
 export default function Calculator(){
 
     const [calc, setCalc] = useState(calcInitial)
-
 
     const handleButtonClick = (e: any) =>{
         e.preventDefault()
         let btnValue = e.target.innerHTML;
         switch(btnValue){
-            case "AC":
+            case "AC": // Reset Button
                 setCalc(calcInitial)
                 break
-            case "+-":
+            case "+-": // Inverse Result
                 setCalc({
                     ...calc,
                     res: calc.res? (parseInt(calc.res) * -1).toString() : calc.res
                 })
                 break
-            case "=":
+            case "=": // Evaluate Expression
                 try{
                     const result = eval(calc.expression)
                     setCalc({
@@ -47,23 +43,24 @@ export default function Calculator(){
                         res: result
                     })
                 }
-                catch(err: any){
+                catch(err: any){ // Handle Syntax Error and Infinity
                     setCalc({
-                        ...calcInitial,
+                        ...calc,
                         res: String(err.name)
                     })
                 }
                 break
-            default:
-                if(btnValue=="X")
+            default: 
+                if(btnValue=="X") // Transform X into a valid operator
                     btnValue="*"
-                if(calc.res!==""){
-                    setCalc({
-                        ...calc,
-                        expression: calc.res
-                    })
+                if(calc.res){
+                    
+                    setCalc(calcInitial)
+                    console.log("clear")
+                    console.log(calc.res)
+
                 }
-                setCalc({
+                setCalc({ // Add operators and numbers to the expression
                     ...calcInitial,
                     expression: calc.expression + btnValue
                     
